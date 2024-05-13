@@ -1,0 +1,84 @@
+<html>
+<head>
+    <title>Игра в напёрстки</title>
+    <style>
+        .cup {
+            width: 100px;
+            height: 150px;
+            background-image: url('cup.jpg');
+            background-size: cover;
+            text-align: center;
+            line-height: 100px;
+            position: relative;
+            cursor: pointer;
+            display: inline-block; /* Display cups inline */
+            margin: 0 10px; /* Add some margin between cups */
+        }
+
+        .ball {
+            width: 20px;
+            height: 20px;
+            background-color: #00f;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .image-button {
+          width: 250px;
+          height: 65px;
+          border: none;
+          background-image: url('button.png');
+          background-size: cover;
+        }
+    </style>
+</head>
+<body align="center" style="background-color:powderblue;">
+    <br/><br/><br/>
+    <div class="cup" onclick="checkCup(1)">Напёрсток 1</div>
+    <div class="cup" onclick="checkCup(2)">Напёрсток 2</div>
+    <div class="cup" onclick="checkCup(3)">Напёрсток 3</div>
+    <div class="ball"></div>
+    <br/><br/><br/><br/>
+    <button class="image-button" onclick="startNewGame()"></button>
+
+    <script>
+        const cup1 = document.querySelectorAll('.cup')[0];
+        const cup2 = document.querySelectorAll('.cup')[1];
+        const cup3 = document.querySelectorAll('.cup')[2];
+        const ball = document.querySelector('.ball');
+
+        let cupWithBall = Math.floor(Math.random() * 3) + 1;
+
+        function checkCup(selectedCup) {
+            if (selectedCup === cupWithBall) {
+                alert('Вы угадали! Шарик был под этим напёрстком.');
+            } else {
+                alert('Вы не угадали. Попробуйте еще раз.');
+            }
+        }
+        function startNewGame() {
+            cupWithBall = Math.floor(Math.random() * 3) + 1;
+            ball.style.display = 'none';
+            alert('Играем заново! )))');
+        }
+
+
+//document.querySelector('button').addEventListener('click', startNewGame);
+
+        document.querySelectorAll('.cup').forEach(cup => {
+            cup.addEventListener('click', () => {
+                ball.style.display = 'block';
+                ball.style.top = (cup.offsetTop + 40) + 'px';
+                ball.style.left = (cup.offsetLeft + 40) + 'px';
+
+                setTimeout(() => {
+                    ball.style.display = 'none';
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>
