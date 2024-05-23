@@ -4,8 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0000ff; /* Blue background */
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            color: #ffff00; /* Yellow text */
+        }
+
+        .ball {
+            position: absolute;
+            border-radius: 50%;
+            background-color: #ff0000; /* Red color for balls */
+            width: 50px;
+            height: 50px;
+            animation: move 20s infinite alternate; /* Slower animation */
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            100% {
+                transform: translateY(100vh) translateX(100vw);
+            }
+        }
+
+        a {
+            display: block;
+            margin: 10px 0;
+            color: #ffff00; /* Yellow text */
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 36px; /* Larger font size */
+        }
+
+        a:hover {
+            color: #ffeb3b;
+        }
+
+        .content {
+            z-index: 1; /* Ensures the text is above the balls */
+        }
+    </style>
 </head>
 <body>
-    hello
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="content">
+        <div style="font-size: 48px; font-weight: bold;">HELLO</div> <!-- Larger font size -->
+        <div>Artist page <a href="./artist/artist.html">here</a></div>
+        <div>Portfolio page  <a href="./portfolio1/index.html">here</a></div>
+        <div>Virtual Reality page <a href="./raitis/VR/index.html">here</a></div>
+        <div>P5 sound <a href="sound/index.html">here</a></div>
+    </div>
 </body>
 </html>

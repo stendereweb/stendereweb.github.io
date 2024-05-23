@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbie Phone Ringing Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffccff; /* Light pink background */
+            background-image: linear-gradient(45deg, #ffccff, #ff99cc); /* Gradient for a rose color effect */
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        #phone {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); /* Drop shadow for the phone */
+            animation: pulse 1.5s infinite alternate; /* Animation for pulsating effect */
+            transition: transform 0.2s ease-in-out; /* Smooth transition for opening/closing */
+        }
+        .butterfly {
+            position: absolute;
+            display: none;
+            width: 60px; /* Adjust the size of the butterflies */
+            height: 40px;
+            filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.5)); /* Drop shadow for the butterflies */
+        }
+        /* Glitter animation */
+        @keyframes glitter {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .glitter {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f7d2e3; /* Lighter rose color for glitter */
+            border-radius: 50%;
+            animation: glitter 1.5s infinite; /* Glitter animation */
+        }
+        /* Pulse animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+        /* Talk animation */
+        @keyframes talk {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-5px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(5px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <audio id="ringtone" src="ringtone.mp3" preload="auto" loop></audio>
+    <audio id="talking" src="talking.mp3" preload="auto"></audio>
+    <img id="phone" src="barbie_phone.png" alt="Barbie's Phone">
+    <!-- Add multiple butterfly images -->
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+    <img class="butterfly" src="butterfly.png" alt="Butterfly">
+
+    <!-- Sparkle effect -->
+    <div id="sparkle"></div>
+
+    <!-- Message popup -->
+    <div id="message">
+        <h1>Hello Barbie!</h1>
+        <p>Thanks for answering the call.</p>
+    </div>
+</body>
+<script>
+    const phone = document.getElementById('phone');
+    const butterflies = document.querySelectorAll('.butterfly');
+    const ringtone = document.getElementById('ringtone');
+    const sparkle = document.getElementById('sparkle');
+    const message = document.getElementById('message');
+    const talkingSound = document.getElementById('talking');
+    let isPhoneOpen = false;
+
+    // Function to play the butterfly animation
+    function startButterflies() {
+        butterflies.forEach(butterfly => {
+            butterfly.style.display = 'block';
+            animateButterfly(butterfly);
+        });
+    }
+
+    // Function to animate a butterfly
+    function animateButterfly(butterfly) {
+        const containerWidth = window.innerWidth;
+        const containerHeight = window.innerHeight;
+        const speed = Math.random() * 3 + 1; // Random speed for each butterfly
+
+        let x = Math.random() * containerWidth;
+        let y = Math.random() * containerHeight;
+
+        let directionX = Math.random() < 0.5 ? -1 : 1; // Random initial horizontal direction
+        let directionY = Math.random() < 0.5 ? -1 : 1; // Random initial vertical direction
+
+        function moveButterfly() {
+            x += speed * directionX;
+            y += speed * directionY;
+
+            if (x < 0 || x > containerWidth) {
+                directionX *= -1;
+            }
+            if (y < 0 || y > containerHeight) {
+                directionY *= -1;
+            }
+
+            butterfly.style.left = x + 'px';
+            butterfly.style.top = y + 'px';
+
+            requestAnimationFrame(moveButterfly);
+        }
+
+        moveButterfly();
+    }
+
+    // Event listener for phone click
+    phone.addEventListener('click', function() {
+        if (isPhoneOpen) {
+            // Close the phone
+            phone.style.transform = 'scale(1)';
+            isPhoneOpen = false;
+            talkingSound.pause();
+        } else {
+            // Open the phone
+            phone.style.transform = 'scale(1.1)';
+            isPhoneOpen = true;
+            talkingSound.currentTime = 0;
+            talkingSound.play();
+        }
+    });
+
+    // Event listener for butterfly click
+    butterflies.forEach(butterfly => {
+        butterfly.addEventListener('click', function() {
+            // Make the butterfly fly away
+            butterfly.style.display = 'none';
+        });
+    });
+</script>
+</html>
