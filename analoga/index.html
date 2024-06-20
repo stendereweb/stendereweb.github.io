@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Algorithm Circles</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <script>
+        function drawCircle(ctx, x, y, radius, isFilled) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            if (isFilled) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // 10% opacity
+                ctx.fill();
+            } else {
+                ctx.stroke();
+            }
+        }
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const canvasSize = canvas.width;
+
+        // Fixed circles (10 examples)
+        const fixedCircles = [
+            { x: 2 * (canvasSize / 6), y: 4 * (canvasSize / 6), radius: 1 * (canvasSize / 12), isFilled: true },
+            { x: 1 * (canvasSize / 6), y: 6 * (canvasSize / 6), radius: 5 * (canvasSize / 12), isFilled: true },
+            { x: 5 * (canvasSize / 6), y: 4 * (canvasSize / 6), radius: 1 * (canvasSize / 12), isFilled: true },
+            { x: 1 * (canvasSize / 6), y: 2 * (canvasSize / 6), radius: 3 * (canvasSize / 12), isFilled: true },
+            { x: 2 * (canvasSize / 6), y: 1 * (canvasSize / 6), radius: 2 * (canvasSize / 12), isFilled: false },
+            { x: 1 * (canvasSize / 6), y: 4 * (canvasSize / 6), radius: 4 * (canvasSize / 12), isFilled: true },
+            { x: 4 * (canvasSize / 6), y: 1 * (canvasSize / 6), radius: 5 * (canvasSize / 12), isFilled: true },
+            { x: 5 * (canvasSize / 6), y: 5 * (canvasSize / 6), radius: 6 * (canvasSize / 12), isFilled: true },
+            { x: 4 * (canvasSize / 6), y: 5 * (canvasSize / 6), radius: 6 * (canvasSize / 12), isFilled: true },
+            { x: 3 * (canvasSize / 6), y: 1 * (canvasSize / 6), radius: 4 * (canvasSize / 12), isFilled: true }
+        ];
+
+        // Draw fixed circles
+        fixedCircles.forEach(circle => {
+            drawCircle(ctx, circle.x, circle.y, circle.radius, circle.isFilled);
+        });
+
+        // Function to simulate dice roll
+        function rollDice() {
+            return Math.floor(Math.random() * 6) + 1;
+        }
+
+        function getRandomCircle(canvasSize) {
+            const x = rollDice() * (canvasSize / 6);
+            const y = rollDice() * (canvasSize / 6);
+            const radius = rollDice() * (canvasSize / 12);
+            const isFilled = rollDice() % 2 === 0; // Even: filled, Odd: not filled
+            return { x, y, radius, isFilled };
+        }
+
+        function drawInfiniteCircles(ctx, canvasSize) {
+            setInterval(() => {
+                const circle = getRandomCircle(canvasSize);
+                drawCircle(ctx, circle.x, circle.y, circle.radius, circle.isFilled);
+            }, 100);
+        }
+
+        // Start drawing infinite circles
+        drawInfiniteCircles(ctx, canvasSize);
+    </script>
+</body>
+</html>

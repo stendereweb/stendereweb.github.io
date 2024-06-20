@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Interactive Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>My Portfolio</h1>
+            <nav>
+                <ul>
+                    <li><a href="#gifs">GIFs</a></li>
+                    <li><a href="#paintings">Paintings</a></li>
+                    <li><a href="#drawings">Drawings</a></li>
+                    <li><a href="#photography">Photography</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="gifs" class="portfolio-section">
+            <h2>GIFs</h2>
+            <div class="gallery">
+                <img src="path/to/gif1.gif" alt="GIF 1">
+                <img src="path/to/gif2.gif" alt="GIF 2">
+                <img src="path/to/gif3.gif" alt="GIF 3">
+            </div>
+        </section>
+
+        <section id="paintings" class="portfolio-section">
+            <h2>Paintings</h2>
+            <div class="gallery">
+                <img src="path/to/painting1.jpg" alt="Painting 1">
+                <img src="path/to/painting2.jpg" alt="Painting 2">
+                <img src="path/to/painting3.jpg" alt="Painting 3">
+            </div>
+        </section>
+
+        <section id="drawings" class="portfolio-section">
+            <h2>Drawings</h2>
+            <div class="gallery">
+                <img src="path/to/drawing1.jpg" alt="Drawing 1">
+                <img src="path/to/drawing2.jpg" alt="Drawing 2">
+                <img src="path/to/drawing3.jpg" alt="Drawing 3">
+            </div>
+        </section>
+
+        <section id="photography" class="portfolio-section">
+            <h2>Photography</h2>
+            <div class="gallery">
+                <img src="path/to/photo1.jpg" alt="Photo 1">
+                <img src="path/to/photo2.jpg" alt="Photo 2">
+                <img src="path/to/photo3.jpg" alt="Photo 3">
+            </div>
+        </section>
+
+        <section id="contact" class="portfolio-section">
+            <h2>Contact</h2>
+            <form action="submit_form.php" method="POST">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                
+                <button type="submit">Send</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 My Portfolio</p>
+            <ul class="social-links">
+                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <script src="scripts.js"></script>
+</body>
+</html>

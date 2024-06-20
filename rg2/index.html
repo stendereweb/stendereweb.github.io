@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Random Shapes in Big Circle</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000; /* Black background */
+        }
+        canvas {
+            background-color: #FFFFFF; /* White square */
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="1000" height="1000"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const bigCircleRadius = 450;
+        const shapesCount = 300; // Increased number of shapes
+        let currentShape = 0;
+        const shapes = [];
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getRandomOpacity() {
+            return Math.random() * 0.5 + 0.1; // Random opacity between 0.1 and 0.6
+        }
+
+        function checkIntersection(shape1, shape2) {
+            if (shape1.type === 'circle' && shape2.type === 'circle') {
+                const dx = shape1.x - shape2.x;
+                const dy = shape1.y - shape2.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                return distance < shape1.radius + shape2.radius;
+            } else if (shape1.type === 'square' && shape2.type === 'square') {
+                return shape1.x < shape2.x + shape2.size &&
+                       shape1.x + shape1.size > shape2.x &&
+                       shape1.y < shape2.y + shape2.size &&
+                       shape1.y + shape1.size > shape2.y;
+            } else if (shape1.type === 'line' && shape2.type === 'line') {
+                // Simplified intersection check for lines
+                return Math.abs(shape1.x1 - shape2.x1) < 10 && Math.abs(shape1.y1 - shape2.y1) < 10;
+            }
+            return false;
+        }
+
+        function drawRandomCircle() {
+            const radius = getRandomInt(10, 30);
+            const angle = Math.random() * Math.PI * 2;
+            const distance = getRandomInt(0, bigCircleRadius - radius);
+            const x = centerX + distance * Math.cos(angle);
+            const y = centerY + distance * Math.sin(angle);
+            let color = `rgba(255, 255, 255, ${getRandomOpacity()})`;
+
+            const newShape = { type: 'circle', x, y, radius };
+
+            for (const shape of shapes) {
+                if (checkIntersection(newShape, shape)) {
+                    color = `rgba(0, 0, 0, ${getRandomOpacity()})`; // Black color if intersecting
+                    break;
+                }
+            }
+
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            shapes.push(newShape);
+        }
+
+        function drawRandomSquare() {
+            const size = getRandomInt(20, 50);
+            const angle = Math.random() * Math.PI * 2;
+            const distance = getRandomInt(0, bigCircleRadius - size / 2);
+            const x = centerX + distance * Math.cos(angle) - size / 2;
+            const y = centerY + distance * Math.sin(angle) - size / 2;
+            let color = `rgba(255, 255, 255, ${getRandomOpacity()})`;
+
+            const newShape = { type: 'square', x, y, size };
+
+            for (const shape of shapes) {
+                if (checkIntersection(newShape, shape)) {
+                    color = `rgba(0, 0, 0, ${getRandomOpacity()})`; // Black color if intersecting
+                    break;
+                }
+            }
+
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, size, size);
+
+            shapes.push(newShape);
+        }
+
+        function drawRandomLine() {
+            const angle1 = Math.random() * Math.PI * 2;
+            const angle2 = Math.random() * Math.PI * 2;
+            const distance1 = getRandomInt(0, bigCircleRadius);
+            const distance2 = getRandomInt(0, bigCircleRadius);
+            const x1 = centerX + distance1 * Math.cos(angle1);
+            const y1 = centerY + distance1 * Math.sin(angle1);
+            const x2 = centerX + distance2 * Math.cos(angle2);
+            const y2 = centerY + distance2 * Math.sin(angle2);
+            let color = `rgba(255, 255, 255, ${getRandomOpacity()})`;
+
+            const newShape = { type: 'line', x1, y1, x2, y2 };
+
+            for (const shape of shapes) {
+                if (checkIntersection(newShape, shape)) {
+                    color = `rgba(0, 0, 0, ${getRandomOpacity()})`; // Black color if intersecting
+                    break;
+                }
+            }
+
+            ctx.strokeStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            shapes.push(newShape);
+        }
+
+        function drawBigCircle() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#000000'; // Black color
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, bigCircleRadius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawNextShape() {
+            if (currentShape >= shapesCount) {
+                currentShape = 0;
+                shapes.length = 0; // Clear the shapes array
+                setTimeout(drawRandomShapes, 1000);
+                return;
+            }
+
+            const shapeType = getRandomInt(1, 4); // Increase likelihood of lines
+            if (shapeType === 1) {
+                drawRandomCircle();
+            } else if (shapeType === 2 || shapeType === 3) { // More lines than squares
+                drawRandomLine();
+            } else {
+                drawRandomSquare();
+            }
+            currentShape++;
+            setTimeout(drawNextShape, 30); // faster drawing speed
+        }
+
+        function drawRandomShapes() {
+            drawBigCircle();
+            drawNextShape();
+        }
+
+        drawRandomShapes();
+    </script>
+</body>
+</html>
