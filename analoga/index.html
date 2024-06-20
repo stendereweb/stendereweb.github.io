@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analog Algorithm Circles</title>
+    <title>Random </title>
     <style>
         body {
             display: flex;
@@ -19,64 +19,70 @@
     </style>
 </head>
 <body>
-    <canvas id="canvas" width="600" height="600"></canvas>
+    <canvas id="canvas" width="1200" height="1200"></canvas>
     <script>
-        function drawCircle(ctx, x, y, radius, isFilled) {
+        function drawCircle(ctx, x, y, radius, color) {
             ctx.beginPath();
             ctx.arc(x, y, radius, 0, 2 * Math.PI);
-            if (isFilled) {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // 10% opacity
-                ctx.fill();
-            } else {
-                ctx.stroke();
-            }
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        function getRandomColor() {
+            const colors = ['rgba(255, 0, 0, 0.03)', 'rgba(0, 0, 255, 0.03)', 'rgba(0, 255, 0, 0.03)'];
+            return colors[Math.floor(Math.random() * colors.length)];
         }
 
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const canvasSize = canvas.width;
+        const gridSize = 6;
+        const cellSize = canvasSize / gridSize;
 
-        // Fixed circles (10 examples)
-        const fixedCircles = [
-            { x: 2 * (canvasSize / 6), y: 4 * (canvasSize / 6), radius: 1 * (canvasSize / 12), isFilled: true },
-            { x: 1 * (canvasSize / 6), y: 6 * (canvasSize / 6), radius: 5 * (canvasSize / 12), isFilled: true },
-            { x: 5 * (canvasSize / 6), y: 4 * (canvasSize / 6), radius: 1 * (canvasSize / 12), isFilled: true },
-            { x: 1 * (canvasSize / 6), y: 2 * (canvasSize / 6), radius: 3 * (canvasSize / 12), isFilled: true },
-            { x: 2 * (canvasSize / 6), y: 1 * (canvasSize / 6), radius: 2 * (canvasSize / 12), isFilled: false },
-            { x: 1 * (canvasSize / 6), y: 4 * (canvasSize / 6), radius: 4 * (canvasSize / 12), isFilled: true },
-            { x: 4 * (canvasSize / 6), y: 1 * (canvasSize / 6), radius: 5 * (canvasSize / 12), isFilled: true },
-            { x: 5 * (canvasSize / 6), y: 5 * (canvasSize / 6), radius: 6 * (canvasSize / 12), isFilled: true },
-            { x: 4 * (canvasSize / 6), y: 5 * (canvasSize / 6), radius: 6 * (canvasSize / 12), isFilled: true },
-            { x: 3 * (canvasSize / 6), y: 1 * (canvasSize / 6), radius: 4 * (canvasSize / 12), isFilled: true }
-        ];
-
-        // Draw fixed circles
-        fixedCircles.forEach(circle => {
-            drawCircle(ctx, circle.x, circle.y, circle.radius, circle.isFilled);
-        });
-
-        // Function to simulate dice roll
         function rollDice() {
             return Math.floor(Math.random() * 6) + 1;
         }
 
-        function getRandomCircle(canvasSize) {
-            const x = rollDice() * (canvasSize / 6);
-            const y = rollDice() * (canvasSize / 6);
-            const radius = rollDice() * (canvasSize / 12);
-            const isFilled = rollDice() % 2 === 0; // Even: filled, Odd: not filled
-            return { x, y, radius, isFilled };
+        function getRandomCircle() {
+            const radius = rollDice() * (cellSize / 3);
+            const x = Math.random() * canvasSize;
+            const y = Math.random() * canvasSize;
+            const color = getRandomColor();
+            return { x, y, radius, color };
         }
 
-        function drawInfiniteCircles(ctx, canvasSize) {
+        function drawInfiniteCircles(ctx) {
+            const offscreenCanvas = document.createElement('canvas');
+            offscreenCanvas.width = canvasSize;
+            offscreenCanvas.height = canvasSize;
+            const offscreenCtx = offscreenCanvas.getContext('2d');
+
             setInterval(() => {
-                const circle = getRandomCircle(canvasSize);
-                drawCircle(ctx, circle.x, circle.y, circle.radius, circle.isFilled);
+                const circle1 = getRandomCircle();
+                const circle2 = getRandomCircle();
+                
+                drawCircle(offscreenCtx, circle1.x, circle1.y, circle1.radius, circle1.color);
+                drawCircle(offscreenCtx, circle2.x, circle2.y, circle2.radius, circle2.color);
+
+                // Check for intersection and draw green circle
+                if (Math.abs(circle1.x - circle2.x) < circle1.radius + circle2.radius &&
+                    Math.abs(circle1.y - circle2.y) < circle1.radius + circle2.radius) {
+                    const intersectionX = (circle1.x + circle2.x) / 2;
+                    const intersectionY = (circle1.y + circle2.y) / 2;
+                    drawCircle(offscreenCtx, intersectionX, intersectionY, circle1.radius, 'rgba(0, 255, 0, 0.03)');
+                }
+
+                ctx.clearRect(0, 0, canvasSize, canvasSize);
+                ctx.drawImage(offscreenCanvas, 0, 0);
             }, 100);
         }
 
-        // Start drawing infinite circles
-        drawInfiniteCircles(ctx, canvasSize);
+        // Start drawing infinite circles after a short delay
+        setTimeout(() => {
+            drawInfiniteCircles(ctx);
+        }, 1000);
     </script>
 </body>
 </html>
+
+
